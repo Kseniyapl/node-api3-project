@@ -1,9 +1,12 @@
+//imports
+
 const User = require('../users/users-model');
-const Post = require('../posts/posts-model')
+
+//middleware
 
 function logger(req, res, next) {
   console.log(req.method, req.url, Date.now())
-  next
+  next()
 }
 
 function validateUserId(req, res, next) {
@@ -18,10 +21,15 @@ function validatePost(req, res, next) {
   // DO YOUR MAGIC
 }
 
-
+function handleError(err, req, res, next) {
+  res.status(err.status || 500).json({
+    "message": `Horror in the router: ${err.message}`
+  })
+}
 module.exports = {
   logger,
   validateUserId,
   validateUser,
-  validatePost
-};
+  validatePost,
+  handleError
+}

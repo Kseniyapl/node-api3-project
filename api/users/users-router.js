@@ -1,14 +1,29 @@
+//imports
+
 const express = require('express');
+const Users = require('./users-model');
+const Posts = require('../posts/posts-model');
+const { 
+  // validateUserId, 
+  // validateUser, 
+  // validatePost,
+  // handleError
+  handleError
+} = require('../middleware/middleware');
 
-const {logger, validateUserId, validateUser, validatePost } = require('../middleware/middleware');
-
-const Users = require('./users-model')
-const Posts = require('../posts/posts-model')
+//express
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  // RETURN AN ARRAY WITH ALL THE USERS
+//endpoints
+
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await Users.get()
+    res.status(200).json(users)
+  } catch (error) {
+    next(error)
+  }
 });
 
 router.get('/:id', (req, res) => {
