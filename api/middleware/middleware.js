@@ -1,3 +1,7 @@
+function sayHi(req, res, next) {
+  console.log(`Hello from the hubs router!`);
+  next();
+}
 function logger(req, res, next) {
   // DO YOUR MAGIC
 }
