@@ -4,8 +4,9 @@ const express = require('express');
 const Users = require('./users-model');
 const Posts = require('../posts/posts-model');
 const { 
-  // validateUserId, 
-  // validateUser, 
+  logger,
+  validateUserId, 
+  validateUser, 
   // validatePost,
   // handleError
   handleError
@@ -26,14 +27,23 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', (req, res) => {
-  // RETURN THE USER OBJECT
-  // this needs a middleware to verify user id
+router.get('/:id', validateUserId, async (req, res, next) => {
+  try{
+    res.json(req.user)
+  }catch(error){
+    next(error)
+  }
 });
 
-router.post('/', (req, res) => {
-  // RETURN THE NEWLY CREATED USER OBJECT
-  // this needs a middleware to check that the request body is valid
+router.post('/', validateUser, (req, res) => {
+  const newUser = req.body;
+  Users.insert(newUser)
+    .then(user => {
+      res.status(201).json(user)
+    })
+    .catch(err => {
+      res.status(400).json(err)
+    })
 });
 
 router.put('/:id', (req, res) => {
