@@ -1,9 +1,9 @@
-function sayHi(req, res, next) {
-  console.log(`Hello from the hubs router!`);
-  next();
-}
+const User = require('../users/users-model');
+const Post = require('../posts/posts-model')
+
 function logger(req, res, next) {
-  // DO YOUR MAGIC
+  console.log(req.method, req.url, Date.now())
+  next
 }
 
 function validateUserId(req, res, next) {
@@ -18,4 +18,10 @@ function validatePost(req, res, next) {
   // DO YOUR MAGIC
 }
 
-// do not forget to expose these functions to other modules
+
+module.exports = {
+  logger,
+  validateUserId,
+  validateUser,
+  validatePost
+};

@@ -2,13 +2,15 @@ const express = require('express');
 
 const server = express();
 
-const usersRouter = require('./users/users-router')
-const middlewareRouter = require("./middleware/middleware")
-
 server.use(express.json());
+const usersRouter = require('./users/users-router')
+
+//const useMiddleware = require("./middleware/middleware")
+
+
 
 server.use('/api/users', usersRouter)
-server.use('/apш/middleware', middlewareRouter)
+//server.use('/api/middleware', useMiddleware)
 
 
 server.get('/', (req, res) => {
