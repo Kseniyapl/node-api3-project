@@ -4,7 +4,7 @@ const express = require('express');
 const Users = require('./users-model');
 const Posts = require('../posts/posts-model');
 const { 
-  logger,
+  
   validateUserId, 
   validateUser, 
   validatePost,
@@ -67,15 +67,27 @@ try{
 }
 });
 
-router.get('/:id/posts', (req, res) => {
-  // RETURN THE ARRAY OF USER POSTS
-  // this needs a middleware to verify user id
+router.get('/:id/posts', validateUserId, async (req, res, next) => {
+  try {
+    const userPosts = await Users.getUserPosts(req.params.id)
+    res.status(200).json(userPosts)
+  } catch (error) {
+    next(error)
+  }
 });
 
-router.post('/:id/posts', (req, res) => {
-  // RETURN THE NEWLY CREATED USER POST
-  // this needs a middleware to verify user id
-  // and another middleware to check that the request body is valid
-});
+router.post('/:id/posts', validateUserId, validatePost, async  (req, res, next) => {
+  try{
+    const { id } = req.params
+    const  { text } = req.body;
+    const  newPost =  await Posts.insert({ text, user_id: id })
+   res.status(200).json(newPost)
+  }
+    catch(error) {
+      next(error)
+    }
+})
+
+router.use(handleError)
 
 module.exports = router;
